@@ -98,6 +98,61 @@ void ReadFile()
     fclose(file);
 }
 
+void AddValue()
+{
+    struct MyFile data;
+    printf("Type new position:\n");
+    printf("Type X: ");
+    scanf("%lf",&data.position.x);
+    printf("\nType Y: ");
+    scanf("%lf",&data.position.y);
+    printf("\nType Z: ");
+    scanf("%lf",&data.position.z);
+    FILE *file = fopen("test.oflu", "a");
+    int count = HowManyDataExits(file);
+    data.id = count+1;
+    fwrite(&data, sizeof(struct MyFile), 1, file);
+    
+    fclose(file);
+}
+
+void DeleteValue()
+{
+    printf("Type ID to delete: ");
+    int dID;
+    scanf("%d", &dID);
+    FILE *file = fopen("test.oflu", "rb+");
+    int count = HowManyDataExits(file);
+
+    struct MyFile* datas = (struct MyFile*)malloc(count * sizeof(struct MyFile));
+    struct MyFile* newDatas = datas;
+
+
+    fread(datas, sizeof(struct MyFile),count, file);
+    int newCount = 0;
+    for (int i = 0; i < count; i++)
+    {
+        if(datas[i].id != dID)
+        {
+            *newDatas = datas[i];
+            newDatas++;
+            newCount++;
+        }
+        
+    }
+
+    free(datas);
+    fclose(file);
+
+
+    file = fopen("test.oflu", "wb");
+    
+
+    fwrite(newDatas, sizeof(struct MyFile), newCount * sizeof(struct MyFile), file);
+    fclose(file);
+    free(newDatas);
+}
+
 void ChooseOperation()
 {
     int op =
@@ -114,16 +169,16 @@ void ChooseOperation()
         CreateFile();
         break;
     case 2:
-        printf("Wut?");
+        AddValue();
         break;
     case 3:
         ReadFile();
         break;
     case 4:
-        printf("Wut?");
+        DeleteValue();
         break;
     default:
-        printf("Undefined");
+        printf("Wut?");
         break;
     }
 }
@@ -136,7 +191,6 @@ int main()
     //CreateFile();
     //ReadFile();
 
-    // ---------------------------
     ChooseOperation();
     
 
