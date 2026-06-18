@@ -91,7 +91,7 @@ void ReadFile()
 
     for (int i = 0; i < count; i++)
     {
-        printf("Element id: %d \n", datas[i].id);
+        printf("ID: %d, Vector: x: %.2f y: %.2f z: %.2f \n", datas[i].id, datas[i].position.x, datas[i].position.y, datas[i].position.z);
     }
     
 
